@@ -38,13 +38,18 @@ type Option struct {
 
 type EnsCli struct {
 	name    string
+	version string
 	log     logger.Logger
 	funcs   map[string]*Function
 	options []*Option
 }
 
 func NewEnsCli(name string, log logger.Logger) (*EnsCli, error) {
-	return &EnsCli{name: name, log: log, funcs: make(map[string]*Function), options: make([]*Option, 0)}, nil
+	return &EnsCli{name: name, version: "0.0.1", log: log, funcs: make(map[string]*Function), options: make([]*Option, 0)}, nil
+}
+
+func (cli *EnsCli) SetVersion(version string) {
+	cli.version = version
 }
 
 func (cli *EnsCli) AddCommand(cmd string, f *Function) {
@@ -84,6 +89,9 @@ func (cli *EnsCli) Run() {
 	if cmd == "-h" || cmd == "-help" {
 		cli.showHelp()
 		return
+	}
+	if cmd == "-v" {
+		cli.log.Info("Tool version : " + cli.version)
 	}
 	f, ok := cli.funcs[cmd]
 	if !ok {
@@ -182,7 +190,7 @@ func (cli *EnsCli) Run() {
 		}
 	}
 	flag.Parse()
-	cli.log.Info("Executing the function : " + f.Title)
+	cli.log.Info("Executing the command : " + f.Title)
 	if !f.Handler() {
 		cli.log.Error(f.FailureMsg)
 	} else {
