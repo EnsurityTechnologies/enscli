@@ -44,8 +44,8 @@ type EnsCli struct {
 	options []*Option
 }
 
-func NewEnsCli(name string, log logger.Logger) (*EnsCli, error) {
-	return &EnsCli{name: name, version: "0.0.1", log: log, funcs: make(map[string]*Function), options: make([]*Option, 0)}, nil
+func NewEnsCli(name string, log logger.Logger) (EnsCli, error) {
+	return EnsCli{name: name, version: "0.0.1", log: log, funcs: make(map[string]*Function), options: make([]*Option, 0)}, nil
 }
 
 func (cli *EnsCli) SetVersion(version string) {
